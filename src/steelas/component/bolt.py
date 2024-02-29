@@ -150,7 +150,7 @@ class Bolt():
 class BoltGroup2D():
     n_p: int = 7
     n_g: int = 2
-    bolt: Bolt | str = Bolt(d_f = 20, bolt_cat = '8.8/S', threads_included = True)
+    bolt: Bolt | str = field(default_factory=Bolt)
     s_p: int = 70 #pitch
     s_g: int = 70 #gauge
     #eccentric: bool = False
