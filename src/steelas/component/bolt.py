@@ -1,6 +1,8 @@
-# -*- coding: utf-8 -*-
 """
-Structural steel `Bolt' Component Class
+Structural steel `Bolt` Component Class.
+
+This module defines classes for representing single structural steel bolt and bolt groups in a 2-column arrangement. 
+It includes properties for geometry, material, and capacities calculations based on Australian standards and ASI design handbooks.
 """
 
 #allows user classes in type hints
@@ -12,8 +14,26 @@ from dataclasses import dataclass, field
 
 @dataclass(kw_only = True)
 class Bolt():  
-    '''A class to represent a single structural bolt'''
+    """
+        Represents a single structural bolt, encapsulating both geometric data and capacity calculations
+        according to specified standards (e.g., AS4100:1998, AS1275:1985).
 
+        Attributes:
+            d_f (float): Diameter of the bolt in mm. Defaults to 20.
+            bolt_cat (str): Category of the bolt indicating its strength and type, e.g., '8.8/S'. Defaults to '8.8/S'.
+            threads_included (bool): Flag indicating whether threads are included in the shear plane. Defaults to True.
+
+        Calculated Attributes (Not directly set by user):
+            name (str): Descriptive name of the bolt, including diameter, category, and thread inclusion status.
+            bolt_des (str): Brief description of the bolt, primarily indicating its diameter.
+            d_h (float): Hole diameter in mm, standard bolt diameter according to AS4100:1998 CL 14.3.5.2.
+            a_e_min (float): Minimum edge distance in mm, derived as per AS4100:1998 Table 9.6.2.
+            s_p_min (float): Minimum pitch (spacing) in mm, derived according to AS4100:1998 CL 9.6.1.
+            phiV_f (float): Design shear strength of the bolt in kN, calculated based on shear capacity factors.
+            phiN_tf (float): Design tension strength of the bolt in kN, calculated based on tension capacity factors.
+            constr (str): Constructor string in JSON format storing initial bolt configuration for easy reconstruction.
+            sig_figs (int): Number of significant figures for rounding numerical outputs. Defaults to 3 and is used internally for output formatting.
+        """
     #data(input)
     d_f: float = 20 #bolt diameter
     bolt_cat: str = '8.8/S'
@@ -59,17 +79,17 @@ class Bolt():
     
     @property
     def phi_shear(self) -> float:
-        '''capacity factor for shear, AS4100 Table 3.4, AS4100 Cl 9.3.2.1'''
+        """Capacity factor for shear, AS4100 Table 3.4 """
         return 0.8
 
     @property
     def phi_tension(self) -> float:
-        '''capacity factor for tension, AS4100 Table 3.4, AS4100 Cl 9.3.2.2'''
+        """Capacity factor for tension, AS4100 Table 3.4, AS4100 Cl 9.3.2.2"""
         return 0.8 
 
     @property
     def P(self) -> float:
-        '''bolt pitch, AS1275:1985 Table 3.2'''
+        """Bolt pitch, AS1275:1985 Table 3.2"""
         default_pitch = {12: 1.75, 16:2, 20:2.5, 24:3, 30:3.5, 36:4}
         if self.d_f not in default_pitch.keys():   
             raise ValueError('Unknown pitch for current bolt diameter')
@@ -78,14 +98,14 @@ class Bolt():
 
     @property
     def A_c(self)-> float:
-        '''bolt core area, ASI Handbook1 Table 8; AS1275:1972 Cl 12a'''
+        """Bolt core area, ASI Handbook1 Table 8; AS1275:1972 Cl 12a"""
         #D-1.22687 P = minor diameter of external threads (AS1275:1972 Cl 12a)
         #NOTE: should be updated to D-1.0825 as per AS1275:1985?
         return pi/4*(self.d_f-1.22687*self.P)**2
 
     @property
     def A_s(self)-> float:
-        '''tensile stress area, ASI Handbook1 Table 8; AS1275:1985 Cl 1.7'''
+        """Tensile stress area, ASI Handbook1 Table 8; AS1275:1985 Cl 1.7"""
         #D - 0.9382 P = mean of pitch and minor diameters
         #NOTE: included in AS1275:1985,  should be updated to 1.0825/2+.6495/2 = 0.866P?
         #see also 1275:1972 Cl A7
@@ -93,12 +113,12 @@ class Bolt():
 
     @property
     def A_o(self) -> float:
-        '''plain shank area, source: ASI Handbook 1 Table 8; AS1275:1985'''
+        """Plain shank area, source: ASI Handbook 1 Table 8; AS1275:1985"""
         return pi/4*(self.d_f)**2
 
     @property 
     def f_uf(self) -> float:
-        '''bolt tensile strength, property class 4.6 - AS1111.1:2000; property class 8.8 - AS/NZS1252:1996'''
+        """Bolt tensile strength, property class 4.6 - AS1111.1:2000; property class 8.8 - AS/NZS1252:1996"""
         prop_class = self.bolt_cat[:3]
         f_uf = {'4.6': 400, '8.8': 830}
         if prop_class not in f_uf.keys():   
@@ -108,30 +128,40 @@ class Bolt():
 
     @property
     def k_r(self) -> float:
-        '''reduction factor for lap connection, AS4100 CL 9.3.2.1'''
+        """Reduction factor for lap connection, AS4100 CL 9.3.2.1"""
         #for single bolt
         return 1.0
     
     @property
     def N_tf(self) -> float:
-        '''bolt nominal capacity in tension, AS4100:1998 CL 9.3.2.2'''
+        """Bolt nominal capacity in tension, AS4100:1998 CL 9.3.2.2"""
         return self.A_s * self.f_uf/1e3 #kN
         
     @property
     def V_fx(self) -> float:
-        '''bolt nominal capacity in shear (thread excluded), AS4100:1998 CL 9.3.2.1'''
+        """Bolt nominal capacity in shear (thread excluded), AS4100:1998 CL 9.3.2.1"""
         #A_v is the available shear area = A_o for thread excluded
         return 0.62 * self.f_uf * self.k_r * self.A_o/1e3
         
     @property
     def V_fn(self) -> float:
-        '''bolt nominal capacity in shear (thread included), AS4100:1998 CL 9.3.2.1'''
+        """Bolt nominal capacity in shear (thread included), AS4100:1998 CL 9.3.2.1"""
         #A_v is the available shear area = A_c for thread included
         return 0.62 * self.f_uf * self.k_r * self.A_c/1e3
     
     @classmethod
     def from_dict(cls, **kwargs) -> Bolt:
-        '''construct object from attribute dict. overrides derived attribute values otherwise calculated in __post_init__ '''
+        """
+        Constructs a Bolt object from a dictionary of attributes, allowing for dynamic creation
+        based on varying specifications. Overriding default or derived attribute values otherwise 
+        calculated in __post_init__.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments representing the attributes of a Bolt instance.
+
+        Returns:
+            Bolt: An instance of the Bolt class, initialized with the specified attributes.
+        """
         o = cls()
         for k, v in kwargs.items():
             #note - @property items are in hasattr but not in __annotations__)
@@ -141,13 +171,42 @@ class Bolt():
 
     @classmethod
     def from_constr(cls, constructor_str: str) -> Bolt:
-        '''construct object from constructor string attribute '''
+        """
+        Constructs a Bolt object from a constructor string that contains a JSON representation
+        of the bolt's configuration.
+
+        Args:
+            constructor_str (str): A JSON string representation of the Bolt's configuration.
+
+        Returns:
+            Bolt: An instance of the Bolt class, initialized based on the JSON string.
+        """
         attr_dict = json.loads(constructor_str)
         return Bolt(**attr_dict)
         
 
 @dataclass(kw_only=True)
 class BoltGroup2D():
+    """
+    Represents a 2-column bolts group, providing functionality for calculating geometric
+    constraints, section properties, and shear capacities based on bolt arrangement and specifications.
+
+    Attributes:
+        n_p (int): Number of bolt rows parallel to the force direction, defaults to 7.
+        n_g (int): Number of bolt columns perpendicular to the force direction, defaults to 2.
+        bolt (Bolt | str): A Bolt instance or a constructor string representing the bolt used in the group, defaults to a default Bolt instance.
+        s_p (int): Center-to-center spacing between bolts in a row (pitch) in mm, defaults to 70.
+        s_g (int): Center-to-center spacing between bolts in a column (gauge) in mm, defaults to 70.
+        sig_figs (int): Number of significant figures to use for rounding calculated values, defaults to 3.
+
+    Calculated Attributes (Not directly set by user):
+        name (str): Automatically generated name for the bolt group based on its configuration.
+        constr (str): JSON string representation of the bolt group's configuration for reconstruction.
+        n_b (int): Total number of bolts in the group, calculated based on `n_p` and `n_g`.
+        d_i_min (float): Minimum required depth for the bolt group based on edge distance considerations.
+        phiV_df (float): Design shear strength of the bolt group in kN, calculated from the bolt's shear capacity and the number of bolts.
+    """
+        
     n_p: int = 7
     n_g: int = 2
     bolt: Bolt | str = field(default_factory=Bolt)
@@ -185,50 +244,50 @@ class BoltGroup2D():
     #---------geom constraint-----------------
     @property #duplicate
     def a_e_min(self): #a_ev or a_eh
-        '''minumum bolt holes edge distance'''
+        """Minumum bolt holes edge distance"""
         return 1.5 * self.bolt.d_f
     
     @property #duplicate
     def s_p_min(self):
-        '''minimum pitch'''
+        """Minimum pitch"""
         return 2.5 * self.bolt.d_f
 
     @property
     def d_hp(self) -> float:
-        '''centre-to-centre depth between top-most and bottom-most bolt holes'''
+        """Centre-to-centre depth between top-most and bottom-most bolt holes"""
         return (self.n_p-1) * self.s_p 
 
     @property
     def d_hg(self) -> float:
-        '''centre-to-centre depth between inner-most and outer-most bolt holes'''
+        """Centre-to-centre depth between inner-most and outer-most bolt holes"""
         return (self.n_g-1) * self.s_g         
     
     @property #duplicate
     def a_ex_bc(self): 
-        '''horizontal plate tear-out length, bolt centre to adjacent hole edge'''
+        """Horizontal plate tear-out length, bolt centre to adjacent hole edge"""
         return self.s_g - self.bolt.d_h/2 -1
 
     @property #duplicate
     def a_ey_bc(self): 
-        '''vertical plate tear-out length, bolt centre to adjacent hole edge'''
+        """Vertical plate tear-out length, bolt centre to adjacent hole edge"""
         return self.s_p - self.bolt.d_h/2 - 1
     
     @property
     def bolt_name(self):
-        '''generate unique bolt name'''
+        """Generate unique bolt name"""
         return self.bolt.name
 
     @property
     def bolt_constr(self):
-        '''generate constructor string'''
+        """Generate constructor string"""
         return self.bolt.constr
 
     def a_ey(self, a_ev_e): 
-        '''vertical plate tear-out length'''
+        """Vertical plate tear-out length"""
         return min(a_ev_e - 1, self.a_ey_bc)  #min[vertical edge distance -1 , vertical hole edge to bolt centre]
     
     def a_ex(self, a_eh_e): 
-        '''horizontal plate tear-out length'''
+        """Horizontal plate tear-out length"""
         return min(a_eh_e - 1, self.a_ex_bc) #min[horizontal edge distance -1, horizontal hole edge to bolt centre]
     
     
@@ -282,36 +341,64 @@ class BoltGroup2D():
 
     #----------plate block shear geom----------
     def l_vy(self, a_ev_e): #in vertical direction
-        '''block shear path parallel to vertical shear force, ASI Handbook1 section 5.4 Figure 50, ASI Design Guide 4 Fig.14'''
+        """Block shear path parallel to vertical shear force, ASI Handbook1 section 5.4 Figure 50, ASI Design Guide 4 Fig.14"""
         return (a_ev_e + self.d_hp) #a_e6(plate)/a_e4(member)
     
     def l_ty(self, a_eh_e): #in horizontal direction
-        '''block shear path perpendicular to vertical shear force, ASI Handbook1 section 5.4 Figure 50'''
+        """Block shear path perpendicular to vertical shear force, ASI Handbook1 section 5.4 Figure 50"""
         # return (a_eh_e - 0.5*self.bolt.d_h ) #for 1D
         return (a_eh_e + self.s_g - 1.5*self.bolt.d_h) #for 2D
         # return (b_i - a_eh - 0.5*self.bolt.d_h) for both 1D&2D
     
     def l_vx(self, a_eh_e): #in horizontal direction
-        '''block shear path parallel to horizontal tension force, ASI Handbook1 section 5.4 Figure 50'''
+        """Block shear path parallel to horizontal tension force, ASI Handbook1 section 5.4 Figure 50"""
         return (self.s_g + a_eh_e) #a_e7(plate)/a_e1(member)
         
     @property #duplicate
     def l_tx(self): #in vertical direction
-        '''block shear path perpendicular to horizontal tension force, ASI Handbook1 section 5.4 Figure 50'''
+        """Block shear path perpendicular to horizontal tension force, ASI Handbook1 section 5.4 Figure 50"""
         return self.d_hp - (self.n_p - 1)*self.bolt.d_h
 
     def _phiV_df(self): #duplicate
-        '''bolt group shear capacty, AS4100:1998 CL 9.3.2.1'''
+        """Bolt group shear capacty, AS4100:1998 CL 9.3.2.1"""
         return round(self.n_b * self.bolt.phiV_f, 2)
 
     @classmethod
     def from_constr(cls, constructor_str: str):
-        '''construct object from constructor string attribute '''
+        """
+        Constructs a BoltGroup2D object from a constructor string that contains the JSON representation
+        of the bolt group's configuration.
+
+        Args:
+            constructor_str (str): A JSON string representing the configuration of the bolt group. It should
+                                include keys for 'n_p', 'n_g', 'bolt' (as a JSON string or dict that can be
+                                passed to `Bolt.from_constr` if necessary), 's_p', and 's_g'.
+
+        Returns:
+            BoltGroup2D: An instance of the BoltGroup2D class initialized with the parameters extracted
+                        from the JSON string.
+        """
         attr_dict = json.loads(constructor_str)
         return BoltGroup2D(**attr_dict)
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """
+        Constructs a BoltGroup2D object from a dictionary of parameters.
+
+        This method differs from direct initialization as it can handle special cases like converting
+        a constructor string for a 'bolt' into a Bolt object.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments that represent the attributes of the BoltGroup2D class.
+                    Special handling for 'bolt_constr' key exists, where the value is expected to be a
+                    constructor string that can be passed to `Bolt.from_constr` to create a Bolt instance.
+
+        Returns:
+            BoltGroup2D: An instance of the BoltGroup2D class initialized with the parameters provided
+                        in the dictionary. If 'bolt_constr' is provided, it is used to initialize the
+                        'bolt' attribute as a Bolt instance.
+        """
         o = cls()
         for k, v in kwargs.items():
             #note - @property items are in hasattr but not in __annotations__)
@@ -356,7 +443,7 @@ class BoltGroup2D():
         
     #----------capacity----------
     def phiV_df_ecc(self, e): #duplicate
-        #source: AS4100:1998 CL 9.3.2.1
+        """Bolt group shear capacty with eccentricity,AS4100:1998 CL 9.3.2.1"""
         return round(self.Z_b(e) * self.n_b * self.bolt.phiV_f, 2)
     
     def phiV_bv_ecc(self, phiV_bf, phiV_ev, phiV_eh, e): #for eccentric use

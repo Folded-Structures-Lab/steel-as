@@ -38,6 +38,29 @@ from steelas.shape import (
 
 @dataclass(kw_only=True)
 class SectionGeometry:
+    """
+    Represents the geometric properties of a structural section.
+
+    This class encapsulates the geometric dimensions and derived properties of various structural section types, 
+    such as I-shapes (WB, WC, UB, UC), Channels (PFC), Hollow Sections (RHS, SHS, CHS), and Plates. It provides 
+    functionality to calculate sectional properties based on the specified geometry, including area, moment of 
+    inertia, section modulus, and radius of gyration, among others.
+
+    Attributes:
+        name (str): A descriptive name for the section.
+        section (str): The specific section designation.
+        sec_type (str): The type of section (e.g., CHS, RHS, UB).
+        d, b, t_f, t_w, t, r_1, r_2, alpha, r_o: Geometric dimensions of the section.
+        A_g (float): Gross area of the section.
+        I_x, I_y (float): Second moment of area about the x-axis and y-axis, respectively.
+        S_x, S_y (float): Elastic section modulus about the x-axis and y-axis, respectively.
+        Z_x, Z_y (float): Plastic section modulus about the x-axis and y-axis, respectively.
+        r_x, r_y (float): Radius of gyration about the x-axis and y-axis, respectively.
+        I_w (float): Warping constant.
+        J (float): Torsional constant.
+        x_c, y_c (float): Coordinates of the centroid, default to 0.
+        sig_figs (int): Number of significant figures for rounding calculations, defaults to 4.
+    """
     name: str = ""
     section: str = ""
     sec_type: str = ""

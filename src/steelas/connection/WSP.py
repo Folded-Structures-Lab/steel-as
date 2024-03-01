@@ -1,9 +1,13 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Jul 13 11:44:17 2022
+Web Side Plate Connection Design Module
 
-@author: s4488545
+This module is dedicated to the detailed design of Web Side Plate (WSP) connections. 
+It features a comprehensive suite of classes that represent various components of steel connections, 
+including bolt groups, welds, plates, and specifically featured members that may have modifications 
+affecting their structural performance. 
+This class performs a series of structural capacity calculations and detailing checks based on ASI Design Guide 3: Web side plate connections. 
 """
+
 import numpy as np
 from dataclasses import dataclass, field
 from math import isnan, log10, floor, isinf
@@ -17,15 +21,36 @@ from steelas.connection.featured_member import FeaturedMember
 
 @dataclass
 class WSPConnection():
-    #Va - weld to web in shear (supporting member to weld)
-    #Vb - bolts shear + plate bearing + member bearing (supported member to bolts to plate)
-    #Vc - plate shear (plate)
-    #Vd - plate bending (plate)
-    #Ve - plate block shear (plate)
-    #Vf - supported member shear (supported member)
-    #Vg - coped memebr block shear (supported member)
-    #Vh - coped member bending (supported member)
-    
+    """
+    Represents a Welded Side Plate (WSP) Connection.
+    This class includes specific properties and methods relevant to WSP connections detailing checks and structural capacity.
+
+    Attributes:
+        featured_member (FeaturedMember): The featured member involved in the connection.
+        bolt_group (BoltGroup2D): The bolt group used in the connection.
+        plate (Plate): The plate used in the connection.
+        weld (Weld): The weld details used in the connection.
+        conn_type (str): Type of the connection, defaulting to 'WSP'.
+        a (float): Vertical offset to the top bolt center, in mm.
+        a_ev_e (float): Vertical edge distance from the bolt hole center to the edge, in mm.
+        detailing_OK (bool): Flag indicating if the connection detailing checks pass.
+        d_i (float): Derived attribute for the effective depth of the connection.
+        a_eh_e (float): Horizontal edge distance, derived attribute.
+        sig_figs (int): Number of significant figures for rounding calculations, defaults to 4.
+
+    Capacities:
+        V_a (float): Weld to web in shear capacity, from the supporting member to the weld.
+        V_b (float): Bolt shear plus plate bearing and member bearing capacity, from the supported member to bolts to plate.
+        V_c (float): Plate in shear capacity.
+        V_d (float): Plate bending capacity.
+        V_e (float): Plate block shear/tear-out capacity.
+        V_f (float): Supported member shear capacity.
+        V_g (float): Coped member block shear capacity.
+        V_h (float): Coped member bending in eccentric load connections.
+
+        V_des_ASI (float): Governing capacity from V_a to V_g, ensuring compliance with ASI Design Guide criteria.
+        V_des_all (float): Governing capacity from V_a to V_h, providing a comprehensive overview of the connection's capacity.
+    """
     featured_member: FeaturedMember
     bolt_group: BoltGroup2D
     plate: Plate  # = Plate(180, 10, 'Plate GR250')

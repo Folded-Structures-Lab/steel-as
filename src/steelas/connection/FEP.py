@@ -1,4 +1,14 @@
-# -*- coding: utf-8 -*-
+"""
+Flexible End Plate Connection Design Module
+
+This module focuses on the detailed design of Flexible End Plate (FEP) connections. 
+It incorporates classes that represent various components of steel connections, 
+such as bolt groups, welds, plates, and specifically featured members.
+
+This class performs a series of structural capacity calculations and detailing checks based on ASI Design Guide 4: Flexible end plate connections. 
+The checks include analyses for weld to web in shear, bolt shear plus plate bearing, plate shear, plate block shear/tear-out, 
+supported member web shear, supported member shear, and bending checks for coped members in eccentric load connections.
+"""
 from dataclasses import dataclass, field
 from math import isnan, log10, floor
 from typing import Callable
@@ -10,18 +20,45 @@ from steelas.connection.featured_member import FeaturedMember
 
 @dataclass
 class Connection():
-    '''parent class for simple steel connections. contains '''
+    """
+    Represents a generic parent class for simple steel connections.
+
+    This base class is intended to be extended by specific connection types, providing common attributes
+    and methods that are applicable across various connection designs. It serves as a foundation for more
+    specialized connection classes, encapsulating shared logic and properties.
+    """
 
 @dataclass
 class FEPConnection():
-    # Va - weld to web in shear (supported member to weld)
-    # Vb - bolts shear + plate bearing (plate to bolt group)
-    # Vc - plate in shear (plate)
-    # Vd - plate block shear/tear-out (plate with bolt hole)
-    # Ve - supported member web shear (supported member)
-    # Vf - supported member shear (supported member)
-    # Vg - coped member bending check (ecc. connection load)
+    """
+    Represents a Flexible End Plate (FEP) connection. This class includes specific properties and methods
+    relevant to FEP connections detailing checks and structural capacity.
 
+    Attributes:
+        featured_member (FeaturedMember): The featured member involved in the connection.
+        bolt_group (BoltGroup2D): The bolt group used in the connection.
+        plate (Plate): The plate used in the connection.
+        weld (Weld): The weld details used in the connection.
+        conn_type (str): Type of the connection, defaulting to 'FEP'.
+        a (float): Vertical offset to the top bolt center, in mm.
+        a_ev_e (float): Vertical edge distance from the bolt hole center to the edge, in mm.
+        detailing_OK (bool): Flag indicating if the connection detailing checks pass.
+        d_i (float): Derived attribute for the effective depth of the connection.
+        a_eh_e (float): Horizontal edge distance, derived attribute.
+        sig_figs (int): Number of significant figures for rounding calculations, defaults to 4.
+
+        Capacities:
+        V_a (float): Weld to web in shear capacity, from the supported member to the weld.
+        V_b (float): Bolt shear plus plate bearing capacity, from the plate to the bolt group.
+        V_c (float): Plate in shear capacity.
+        V_d (float): Plate block shear/tear-out capacity, for plates with bolt holes.
+        V_e (float): Supported member web shear capacity.
+        V_f (float): Supported member shear capacity.
+        V_g (float): Coped member bending check capacity, for eccentric connection loads.
+
+        V_des_ASI (float): Governing capacity of V_a to V_f, ensuring compliance with ASI Design Guide criteria.
+        V_des_all (float): Governing capacity of V_a to V_g, providing a comprehensive overview of the connection's capacity.
+    """
     featured_member: FeaturedMember
     # = BoltGroup_2D(7, 2, Bolt(d_f = 20, bolt_cat = '8.8/S', threads_included = True), 70, 140, 35)
     bolt_group: BoltGroup2D
@@ -208,17 +245,17 @@ class FEPConnection():
 
     @property
     def long_name(self) -> str:
-        '''returns a (long) name string by concatenating member + component names'''
+        """returns a (long) name string by concatenating member + component names"""
         n = f'{self.member_name}, {self.bolt_group_name}, {self.plate_name}, {self.weld_name}'
         return n
 
     def name_constr(self) -> Callable:
-        '''returns a function that constructs a '''
+        """returns a function that constructs a """
         def nf(x): return f'{self.conn_type} {str(x)}'
         return nf
 
     def short_name(self, short_id: int | str) -> str:
-        '''returns a short name string, using the defined name_constr function'''
+        """returns a short name string, using the defined name_constr function"""
         name_function = self.name_constr()
         return name_function(short_id)
 

@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-These scripts calculate AS steel material properties based on section geometry (used for plate components and sections)
-
-@author: uqjgatta
+This module calculate AS steel material properties based on section geometry (used for plate components and sections)
 """
 
 import numpy as np
@@ -13,6 +10,27 @@ from typing import Callable
 
 @dataclass(kw_only=True)
 class SteelMaterial:
+    """
+    Represents the material properties of steel used in structural engineering design.
+
+    This class encapsulates the essential characteristics and mechanical properties of steel materials,
+    including yield stress, tensile strength, and specific attributes for different types of steel sections
+    (e.g., hot-rolled sections). It allows for the dynamic calculation of material properties based on section
+    thicknesses and provides utilities for common material-related values such as density, modulus of elasticity,
+    shear modulus, Poisson's ratio, and coefficient of thermal expansion.
+
+    Attributes:
+        grade (str): The grade of the steel material, e.g., 'GR300'.
+        mat_type (str): The type of steel material, e.g., 'HotRolledSection'.
+        name (str): An optional name for the steel material.
+        f_y (float): Yield stress used in design, dynamically calculated based on section thickness.
+        f_u (float): Tensile strength used in design, dynamically calculated.
+        res_stress (str): Designator for the type of residual stress category, e.g., 'HR' for hot-rolled.
+        t (float): Plate thickness, applicable for closed sections.
+        t_f (float): Flange thickness, applicable for open sections.
+        t_w (float): Web thickness, applicable for open sections.
+        f_yw (float): Web yield stress, dynamically calculated based on web thickness.
+    """
     grade: str = "GR300"
     mat_type: str = "HotRolledSection"
     name: str = ""
@@ -378,7 +396,8 @@ def AS3597_fu(grade: str, t: float = np.nan) -> int:
 
 
 def material_type_functions(mat_type: str) -> tuple[Callable, Callable]:
-    """returns functions for fy and fu from given material type
+    """
+    returns functions for fy and fu from given material type
     'HollowSection'    -> AS1163
     'HotRolledFlats'   -> Not Implemented AS1594
     'HotRolledPlate'   -> AS3678

@@ -1,6 +1,8 @@
-# -*- coding: utf-8 -*-
 """
-Structural steel `Weld' Component Class
+Structural Steel `Weld` Component Class.
+
+This module defines the Weld class for representing a structural steel weld, including its dimensions,
+geometry, material properties, and various capacity calculations based on Australian standards and ASI design handbooks.
 """
 
 #allows user classes in type hints
@@ -12,6 +14,25 @@ from dataclasses import dataclass, field
 
 @dataclass(kw_only=False)
 class Weld():
+    """
+    Represents a structural steel weld, encapsulating its dimensions, type, category, class, and
+    providing methods for capacity calculations.
+
+    Attributes:
+        t_w (int): Leg size of the fillet weld in mm.
+        weld_type (str): Type of weld, e.g., 'CFW' for continuous fillet weld.
+        weld_cat (str): Category of the weld, e.g., 'SP' for specific purpose.
+        weld_class (str): Class of the weld electrode, e.g., 'E48XX'.
+
+    Calculated Attributes (Not directly set by user):
+        phiv_w (float): Design capacity of the weld per unit length in kN/mm, calculated post-initialization.
+        name (str): Descriptive name of the weld, combining its dimensions, type, category, and class.
+        constr (str): Constructor string in JSON format storing the weld's initial configuration.
+        sig_figs (int): Number of significant figures for rounding calculated values.
+
+    The class includes properties to derive critical weld parameters like design throat thickness,
+    nominal weld capacity, and capacity factors based on standards such as AS4100:1998.
+    """
     t_w: int = 6  # weld leg
     weld_type: str = 'CFW'
     weld_cat: str = 'SP'
@@ -91,21 +112,34 @@ class Weld():
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """
+        Constructs a Weld object from a dictionary of attributes, allowing for dynamic creation based
+        on varying specifications.
+
+        Args:
+            **kwargs: Arbitrary keyword arguments corresponding to Weld attributes.
+
+        Returns:
+            Weld: An initialized Weld object based on the provided attributes.
+        """  
         o = cls()
         for k, v in kwargs.items():
             if hasattr(o, k):
                 setattr(o, k, v)
         return o
 
-    # @classmethod
-    # def from_name(cls, str_name):
-    #     t_w, weld_type, weld_cat, weld_class = tuple(str_name.split())
-    #     t_w = [int(s) for s in t_w if s.isdigit()][0]
-    #     return cls(t_w = t_w, weld_type = weld_type, weld_cat = weld_cat, weld_class = weld_class)
-
     @classmethod
     def from_constr(cls, constructor_str: str) -> Weld:
-        '''construct object from constructor string attribute '''
+        """
+        Constructs a Weld object from a constructor string that contains a JSON representation
+        of the weld's configuration.
+
+        Args:
+            constructor_str (str): JSON string representation of the Weld's configuration.
+
+        Returns:
+            Weld: An initialized Weld object based on the JSON string.
+        """
         attr_dict = json.loads(constructor_str)
         return Weld(**attr_dict)
 
