@@ -21,12 +21,12 @@ class Plate():
     A class to represent a structural steel plate, encapsulating dimensions, material grade, and providing
     methods to calculate its structural capacities.
 
-    Attributes:
+    Attributes: Attributes
         b_i (int): Width of the plate in mm. Defaults to 200.
         t_i (int): Thickness of the plate in mm. Defaults to 10.
         plate (str): Description of the plate including material grade. Defaults to 'Plate GR250'.
 
-    Calculated Attributes (Not directly set by user):
+    Attributes: Derived Attributes
         name (str): Descriptive name of the plate, including its dimensions and material grade.
         constr (str): Constructor string in JSON format for easy reconstruction of the plate object.
         plate_type (str): Type of the plate derived from the `plate` attribute.

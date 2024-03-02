@@ -25,7 +25,7 @@ class FeaturedMember():
     capacities. It allows for the specification of features like cope type, dimensions, and recalculates
     modified structural properties based on these features.
 
-    Attributes:
+    Attributes: Attributes
         unfeatured_member (SteelMember): The base SteelMember object before feature application.
         features (str): Descriptive string of the applied features.
         cope_type (str): Type of coping applied ('O' for open, etc.).

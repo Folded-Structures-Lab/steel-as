@@ -34,7 +34,7 @@ class FEPConnection():
     Represents a Flexible End Plate (FEP) connection. This class includes specific properties and methods
     relevant to FEP connections detailing checks and structural capacity.
 
-    Attributes:
+    Attributes: Attributes
         featured_member (FeaturedMember): The featured member involved in the connection.
         bolt_group (BoltGroup2D): The bolt group used in the connection.
         plate (Plate): The plate used in the connection.
@@ -43,11 +43,12 @@ class FEPConnection():
         a (float): Vertical offset to the top bolt center, in mm.
         a_ev_e (float): Vertical edge distance from the bolt hole center to the edge, in mm.
         detailing_OK (bool): Flag indicating if the connection detailing checks pass.
+        
         d_i (float): Derived attribute for the effective depth of the connection.
         a_eh_e (float): Horizontal edge distance, derived attribute.
         sig_figs (int): Number of significant figures for rounding calculations, defaults to 4.
 
-        Capacities:
+        
         V_a (float): Weld to web in shear capacity, from the supported member to the weld.
         V_b (float): Bolt shear plus plate bearing capacity, from the plate to the bolt group.
         V_c (float): Plate in shear capacity.

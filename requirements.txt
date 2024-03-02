@@ -1,5 +1,5 @@
 mkdocs-autorefs==0.4.1
-mkdocstrings==0.22.0
-mkdocstrings-python==1.1.2
+mkdocstrings>=0.24.0
+mkdocstrings-python>=1.8
 numpy>=1.25.0
 pandas>=2.0.2

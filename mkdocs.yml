@@ -16,11 +16,11 @@ plugins:
               show_submodules: false
               separate_signature: true
               show_category_heading: true
-              group_by_category: true
+              group_by_category: false
               show_source: false
               show_root_heading: false
               show_root_toc_entry: false
-              heading_level: 3
+              heading_level: 4
               filters: ['!main']
               members_order: source
             paths: [src]
@@ -30,8 +30,8 @@ nav:
   - Introduction:
     - About: index.md
     - Installation: install.md
-  - Tutorials: 
-    - Quick Start: tutorial-1.md
+  # - Tutorials: 
+  #   - Quick Start: tutorial-1.md
   - Technical:
     - API Reference: reference.md
 

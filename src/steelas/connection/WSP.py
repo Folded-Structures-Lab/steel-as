@@ -25,7 +25,7 @@ class WSPConnection():
     Represents a Welded Side Plate (WSP) Connection.
     This class includes specific properties and methods relevant to WSP connections detailing checks and structural capacity.
 
-    Attributes:
+    Attributes: Attributes
         featured_member (FeaturedMember): The featured member involved in the connection.
         bolt_group (BoltGroup2D): The bolt group used in the connection.
         plate (Plate): The plate used in the connection.
@@ -38,7 +38,6 @@ class WSPConnection():
         a_eh_e (float): Horizontal edge distance, derived attribute.
         sig_figs (int): Number of significant figures for rounding calculations, defaults to 4.
 
-    Capacities:
         V_a (float): Weld to web in shear capacity, from the supporting member to the weld.
         V_b (float): Bolt shear plus plate bearing and member bearing capacity, from the supported member to bolts to plate.
         V_c (float): Plate in shear capacity.

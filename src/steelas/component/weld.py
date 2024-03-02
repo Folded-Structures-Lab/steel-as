@@ -18,13 +18,13 @@ class Weld():
     Represents a structural steel weld, encapsulating its dimensions, type, category, class, and
     providing methods for capacity calculations.
 
-    Attributes:
+    Attributes: Attributes
         t_w (int): Leg size of the fillet weld in mm.
         weld_type (str): Type of weld, e.g., 'CFW' for continuous fillet weld.
         weld_cat (str): Category of the weld, e.g., 'SP' for specific purpose.
         weld_class (str): Class of the weld electrode, e.g., 'E48XX'.
 
-    Calculated Attributes (Not directly set by user):
+    Attributes: Derived Attributes
         phiv_w (float): Design capacity of the weld per unit length in kN/mm, calculated post-initialization.
         name (str): Descriptive name of the weld, combining its dimensions, type, category, and class.
         constr (str): Constructor string in JSON format storing the weld's initial configuration.

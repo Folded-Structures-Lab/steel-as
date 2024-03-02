@@ -1,7 +1,6 @@
 
 # API
-
-
+<!-- 
 ## Members
 
 ### *geometry* Module
@@ -18,7 +17,7 @@
 
 ### *slenderness* Module
 
-:::steelas.member.slenderness
+:::steelas.member.slenderness -->
 
 ## Components
 
