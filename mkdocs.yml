@@ -1,0 +1,48 @@
+site_name: steelas
+
+theme:
+  name: readthedocs
+  navigation_depth: 4
+
+plugins:
+  - search 
+  - mkdocstrings:
+      handlers:
+        python:
+            setup_commands:
+                - import sys
+                - sys.path.append('../')
+            options:
+              show_submodules: false
+              separate_signature: true
+              show_category_heading: true
+              group_by_category: false
+              show_source: false
+              show_root_heading: false
+              show_root_toc_entry: false
+              heading_level: 4
+              filters: ['!main']
+              members_order: source
+            paths: [src]
+
+
+nav:
+  - Introduction:
+    - About: index.md
+    - Installation: install.md
+  # - Tutorials: 
+  #   - Quick Start: tutorial-1.md
+  - Technical:
+    - API Reference: reference.md
+
+watch:
+  - src/steelas
+
+markdown_extensions:
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js

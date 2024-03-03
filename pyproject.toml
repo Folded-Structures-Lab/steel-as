@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "steelas"
+version = "0.1.0"
+authors = [
+  { name="Joe Gattas", email="j.gattas@uq.edu.au" },
+  { name="Yuyu Wang", email="yuyu.wang@uq.net.au"},
+]
+description = "steelas is a Python package for the design of steel structures to relevant Australian Standards"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = ["AS4100", "steel structures", "structural engineering"]
+dependencies = [
+    "numpy>=1.25.0",
+    "pandas>=2.0.2"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Folded-Structures-Lab/steel-as"
+
