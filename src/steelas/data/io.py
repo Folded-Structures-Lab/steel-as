@@ -46,6 +46,9 @@ def get_section_from_library(
     selected_item = sec_df[sec_df[lookup_col] == lookup_val]
     if len(selected_item) > 1:
         raise ValueError(f"Error: non-unique {lookup_col}: {lookup_val}")
+
+    if len(selected_item) == 0:
+        raise ValueError(f"Error: no sections with {lookup_col} equal to {lookup_val}")
     return selected_item.iloc[0].to_dict()
 
 
