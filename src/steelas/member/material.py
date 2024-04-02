@@ -7,6 +7,8 @@ from math import isnan
 from dataclasses import dataclass
 from typing import Callable
 
+from steelas.data.io import report
+
 
 @dataclass(kw_only=True)
 class SteelMaterial:
@@ -31,6 +33,7 @@ class SteelMaterial:
         t_w (float): Web thickness, applicable for open sections.
         f_yw (float): Web yield stress, dynamically calculated based on web thickness.
     """
+
     grade: str = "GR300"
     mat_type: str = "HotRolledSection"
     name: str = ""
@@ -61,11 +64,14 @@ class SteelMaterial:
         self.f_u = self._f_u()
         self.res_stress = self._res_stress()
 
+    def report(self, **kwargs):
+        return report(self, **kwargs)
+
     @property
     def density(self) -> int:
         """Density of Steel, kg/m^3"""
         return 7850
-    
+
     @property
     def E(self) -> int:
         """Modulus of Elasticity, AS4100 Cl 2.2.4"""

@@ -3,8 +3,8 @@
 """
 This module provides classes and functions to manage steel sections and their geometric properties.
 
-Classes:    
-    SectionGeometry: TODO. 
+Classes:
+    SectionGeometry: TODO.
 
 Functions:
     import_section_library(): Returns a DataFrame containing the section library defined
@@ -27,6 +27,8 @@ from steelas.shape import (
     rectangleplate,
 )
 
+from steelas.data.io import report
+
 
 # list section property keys
 # open_section_keys = ['d', 'b', 't_f', 't_w', 'r']
@@ -41,9 +43,9 @@ class SectionGeometry:
     """
     Represents the geometric properties of a structural section.
 
-    This class encapsulates the geometric dimensions and derived properties of various structural section types, 
-    such as I-shapes (WB, WC, UB, UC), Channels (PFC), Hollow Sections (RHS, SHS, CHS), and Plates. It provides 
-    functionality to calculate sectional properties based on the specified geometry, including area, moment of 
+    This class encapsulates the geometric dimensions and derived properties of various structural section types,
+    such as I-shapes (WB, WC, UB, UC), Channels (PFC), Hollow Sections (RHS, SHS, CHS), and Plates. It provides
+    functionality to calculate sectional properties based on the specified geometry, including area, moment of
     inertia, section modulus, and radius of gyration, among others.
 
     Attributes:
@@ -61,6 +63,7 @@ class SectionGeometry:
         x_c, y_c (float): Coordinates of the centroid, default to 0.
         sig_figs (int): Number of significant figures for rounding calculations, defaults to 4.
     """
+
     name: str = ""
     section: str = ""
     sec_type: str = ""
@@ -96,6 +99,9 @@ class SectionGeometry:
     def __post_init__(self):
         if self.sec_type != "":
             self.solve_shape()
+
+    def report(self, **kwargs):
+        return report(self, **kwargs)
 
     def solve_shape(self):
         if self.sec_type in ["CHS"]:
