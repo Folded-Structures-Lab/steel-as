@@ -1,14 +1,13 @@
 """Example steelas code for defining geometric and material properties"""
 
-
 ############################
-# 1. Define a Steel Section
+# Define a Steel Section
 ############################
 
 from steelas.data.io import (
+    MemberLibrary,
     get_section_from_library,
     import_section_library,
-    MemberLibrary,
 )
 from steelas.member.geometry import SectionGeometry
 
@@ -48,11 +47,11 @@ hollow_section_parameters = get_section_from_library(
 geom2 = SectionGeometry.from_dict(**hollow_section_parameters)
 geom2.report()
 
-# ############################
-# # 2. Define a Steel Material
-# ############################
+############################
+# Define a Steel Material
+############################
 
-from steelas.member.material import SteelMaterial, SteelMaterialType, SteelGrade
+from steelas.member.material import SteelGrade, SteelMaterial, SteelMaterialType
 
 # EG 2A
 print("\n Example 2A: Define a steel material property from Australian Standards")

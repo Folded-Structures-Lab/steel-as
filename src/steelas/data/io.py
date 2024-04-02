@@ -62,6 +62,7 @@ def report(
     attribute_names: str | list[str] | None = None,
     exclude_attribute_names: list[str] | None = None,
     report_type: str = "print",
+    with_name: bool = True,
     # with_nomenclature: bool = False,
     # with_clause: bool = False,
 ) -> None:
@@ -80,8 +81,9 @@ def report(
 
     if report_type == "print":
         # print out attributes
-        if hasattr(obj, "__class__"):
+        if hasattr(obj, "__class__") and with_name:
             print("\n")
+            # name = obj.name if hasattr(obj, "name") else ""
             print(f"{obj.__class__.__name__} Attributes:")
 
         for att in attribute_names:

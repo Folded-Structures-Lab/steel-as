@@ -118,9 +118,9 @@ class SteelSection:
     def f_yw(self):
         return self.mat.f_yw
 
-    @property
-    def k_f(self):
-        return self.mat.k_f
+    # @property
+    # def k_f(self):
+    #     return self.mat.k_f
 
     # ----------------
     # Slenderness Attrs
