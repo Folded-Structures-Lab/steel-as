@@ -8,14 +8,19 @@ Python code for the following examples are available in the Github repository [e
 A typical operation is shown in the below example. Section and material properties are first defined from library import. A structural member is then defined from section, material, and design information. See the following pages for additional information. 
 
 ```
-from steelas.member.geometry import SectionGeometry
-from steelas.data.io import import_section_library
+from steelas.member.member import SteelSection, SteelMember
+from steelas.data.io import MemberLibrary
 
+# Create a steel section from the library
+section = SteelSection.from_library(MemberLibrary.OpenSections, "1200WB423 (GR300)")
+section.report()
 
-#create section and materials
+# Calculate section capacities
+sm = SteelMember(section=section)
+sm.report(attribute_names=["phiN_t", "phiN_s", "phiV_v", "phiM_sx", "phiM_sy"])
 
-
-# create a structural member
-
-
+# Calculate member capacities
+sm = SteelMember(section=section, l_ex=21000, l_ey=4000, l_eb=0, alpha_m=1)
+sm.report()
+print(sm.phiN_c)
 ```

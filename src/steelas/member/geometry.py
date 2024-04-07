@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from math import floor, log10, isnan
 from dataclasses import dataclass, field
+from enum import StrEnum
 import numpy as np
 
 from steelas.shape import (
@@ -28,6 +29,19 @@ from steelas.shape import (
 )
 
 from steelas.data.io import report
+
+
+class SectionType(StrEnum):
+    CHS = "CHS"
+    RHS = "RHS"
+    SHS = "SHS"
+    WB = "WB"
+    UB = "UB"
+    UC = "UC"
+    PFC = "PFC"
+    BT = "BT"
+    CT = "CT"
+    RectPlate = "RectPlate"
 
 
 # list section property keys

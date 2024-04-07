@@ -8,6 +8,8 @@
 - [Installation](install.md)
 - Tutorials
     - [Quick Start](tutorial-1.md)
+    - [Geometry and Material](tutorial-2.md)
+    - [Tension and Compression Capacity](tutorial-3.md)
 - [API Reference](reference.md)
 
 
@@ -21,7 +23,9 @@ Please see the project [Github repository](https://github.com/Folded-Structures-
 # Acknowledgements
 This package has been developed from research projects supported by the [University of Queensland](https://civil.uq.edu.au/).
 
-If you use *steelas* for projects or scientific publications, please cite our work.
+If you use *steelas* for projects or scientific publications, please consider citing our journal paper:
+> Wang, Y., Bottazzi, V.S., & Gattas, J. M. (2024). A novel framework for set-based steel connection design automation. *Computers and Structures*. [doi:10.1016/j.compstruc.2024.107366](https://doi.org/10.1016/j.compstruc.2024.107366).
+
 
 ## Contributors: 
 

@@ -34,7 +34,7 @@ def import_section_library(
 
 
 def get_section_from_library(
-    library: MemberLibrary, lookup_val: str, lookup_col: str = "section"
+    library: MemberLibrary, lookup_val: str, lookup_col: str = "name"
 ) -> dict:
     """
     Returns a single row of section parameters from section library, based on lookup

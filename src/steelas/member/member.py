@@ -165,7 +165,7 @@ class SteelSection:
 
     @classmethod
     def from_library(
-        cls, library: MemberLibrary, lookup_val: str, lookup_col: str = "section"
+        cls, library: MemberLibrary, lookup_val: str, lookup_col: str = "name"
     ) -> SteelSection:
         section_dict = get_section_from_library(
             library, lookup_val=lookup_val, lookup_col=lookup_col
@@ -416,11 +416,21 @@ class SteelMember:
     # AS4100 Section 7 Members subject to axial tension-----------------------
     # ------------------------------------------------------------------------
 
+    @property
+    def _N_ty(self) -> float:
+        """AS4100 Cl 7.2 - tension yield capacity"""
+        return self.section.A_g * self.section.f_y
+
+    @property
+    def _N_tf(self) -> float:
+        """AS4100 Cl 7.2 - tension fracture capacity"""
+        return 0.85 * self.k_t * self.section.A_n * self.section.f_u
+
     def _N_t(self) -> float:
         """AS4100 Cl 7.2 Nominal section capacity, axial tension"""
         N_t = min(
-            self.section.A_g * self.section.f_y,
-            0.85 * self.k_t * self.section.A_n * self.section.f_u,
+            self._N_ty,
+            self._N_tf,
         )
         return N_t
 

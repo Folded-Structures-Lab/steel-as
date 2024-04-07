@@ -30,8 +30,10 @@ nav:
   - Introduction:
     - About: index.md
     - Installation: install.md
-  # - Tutorials: 
-  #   - Quick Start: tutorial-1.md
+  - Member Design Tutorials: 
+    - Quick Start: tutorial-1.md
+    - Geometry and Materials: tutorial-2.md
+    - Section and Member Capacities: tutorial-3.md
   - Technical:
     - API Reference: reference.md
 
