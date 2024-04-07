@@ -11,7 +11,7 @@ from steelas.member.geometry import SectionGeometry
 
 print("\n Example 1A: Define a steel section from library import")
 open_section_library = MemberLibrary.OpenSections
-open_section_parameters = get_section_from_library(open_section_library, "250UC72.9")
+open_section_parameters = get_section_from_library(open_section_library, "250UC72.9 (GR300)")
 geom = SectionGeometry.from_dict(**open_section_parameters)
 geom.report()
 ```

@@ -2,7 +2,7 @@
 *steelas* is a Python package with tools to support research and design of Australian steel structures. It can be used to determine the material properties, section properties, and design capacities for structural members as per Australian Standard AS4100:2020 (Steel Structures). 
 
 # Documentation
-Detailed information on *steelas* is available in package documentation at [steelas.readthedocs.io](https://steel-as.readthedocs.io/). This includes project background, examples, and an API reference guide.
+Detailed information on *steelas* is available in package documentation at [steel-as.readthedocs.io](https://steel-as.readthedocs.io/). This includes project background, examples, and an API reference guide.
 
 # Installation
 *steelas* can be installed from the Python Package index:
