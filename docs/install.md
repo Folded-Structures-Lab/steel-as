@@ -6,7 +6,7 @@ This page will guide you through the installation process for *steelas*.
 
 Before you begin, ensure:
 
-- You have installed Python 3.10+.
+- You have installed Python 3.11+.
 - You have a basic understanding of Python programming.
 
 ## Installation

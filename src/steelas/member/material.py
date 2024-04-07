@@ -7,6 +7,33 @@ from math import isnan
 from dataclasses import dataclass
 from typing import Callable
 
+from steelas.data.io import report
+
+from enum import StrEnum
+
+
+class SteelMaterialType(StrEnum):
+    HotRolledSection = "HotRolledSection"
+    HollowSection = "HollowSection"
+    HotRolledPlate = "HotRolledPlate"
+    WeldedSection = "WeldedSection"
+
+
+class SteelGrade(StrEnum):
+    C450 = "C450"
+    C350 = "C350"
+    C250 = "C250"
+    GR450 = "GR450"
+    GR400 = "GR400"
+    GR350 = "GR350"
+    GR300 = "GR300"
+    WR350 = "WR350"
+    GR250 = "GR250"
+    GR200 = "GR200"
+    PR500 = "PR500"
+    PR600 = "PR600"
+    PR700 = "PR700"
+
 
 @dataclass(kw_only=True)
 class SteelMaterial:
@@ -31,9 +58,10 @@ class SteelMaterial:
         t_w (float): Web thickness, applicable for open sections.
         f_yw (float): Web yield stress, dynamically calculated based on web thickness.
     """
-    grade: str = "GR300"
-    mat_type: str = "HotRolledSection"
+
     name: str = ""
+    grade: str | SteelGrade = "GR300"
+    mat_type: str | SteelMaterialType = "HotRolledSection"
     f_y: float = 0  # yield stress used in design
     f_u: float = 0  # tensile strength used in design
 
@@ -61,11 +89,14 @@ class SteelMaterial:
         self.f_u = self._f_u()
         self.res_stress = self._res_stress()
 
+    def report(self, **kwargs):
+        return report(self, **kwargs)
+
     @property
     def density(self) -> int:
         """Density of Steel, kg/m^3"""
         return 7850
-    
+
     @property
     def E(self) -> int:
         """Modulus of Elasticity, AS4100 Cl 2.2.4"""

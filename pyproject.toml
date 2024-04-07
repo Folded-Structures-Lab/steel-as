@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "steelas"
-version = "0.1.2"
+version = "0.2.0"
 authors = [
   { name="Joe Gattas", email="j.gattas@uq.edu.au" },
   { name="Yuyu Wang", email="yuyu.wang@uq.net.au"},
 ]
 description = "steelas is a Python package for the design of steel structures to relevant Australian Standards"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
