@@ -31,5 +31,5 @@ Please note that this software has been developed by student and academic engine
 # Acknowledgements
 This package has been developed from research projects supported by the [University of Queensland](https://civil.uq.edu.au/).
 
-If you use *steelas* for projects or scientific publications, please consider citing our work.
-
+If you use *steelas* for projects or scientific publications, please consider citing our work:
+> Wang, Y., Bottazzi, V.S., & Gattas, J. M. (2024). A novel framework for set-based steel connection design automation. *Computers and Structures*. [doi:10.1016/j.compstruc.2024.107366](https://doi.org/10.1016/j.compstruc.2024.107366).

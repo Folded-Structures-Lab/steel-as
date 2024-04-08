@@ -31,3 +31,4 @@ If you use *steelas* for projects or scientific publications, please consider ci
 
 - [Dr Joe Gattas](https://researchers.uq.edu.au/researcher/9443)
 - [Yuyu Wang](https://github.com/wyy0990)
+- Thomas Meng
