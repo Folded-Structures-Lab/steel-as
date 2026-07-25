@@ -325,11 +325,12 @@ class SteelSlenderness:
 
     def _web_shear_slenderness_ratio(self) -> bool:
         """AS4100 Cl 5.11.2 web shear slenderness ratio for sections with approximatly uniform web shear stress distribution"""
-        r1 = self.geom.d_p / self.geom.t_w
-        if "f_yw" in self.mat.__dict__:
-            r2 = 82 / (self.mat.f_yw / 250) ** 0.5
-        else:
-            r2 = 82 / (self.mat.f_y / 250) ** 0.5
+        t_w = self.geom.t if self.geom.sec_type in ("RHS", "SHS") else self.geom.t_w
+        f_yw = self.mat.f_yw
+        if isnan(f_yw):
+            f_yw = self.mat.f_y
+        r1 = self.geom.d_p / t_w
+        r2 = 82 / (f_yw / 250) ** 0.5
         return r2 / r1
 
     def _alpha_v(self) -> float:
