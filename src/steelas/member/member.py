@@ -507,14 +507,12 @@ class SteelMember:
     def V_w(self) -> float:
         """AS4100 Cl 5.11.4 shear yield capacity"""
         if self.section.sec_type == "CHS":
-            A_e = self.section.A_g
-            return 0.36 * self.section.f_y * A_e
-        else:
-            # TODO: improve this - embed in SteelSection?
-            if "f_yw" in self.section.mat.__dict__:
-                return 0.6 * self.section.f_yw * self.section.A_w
-            else:
-                return 0.6 * self.section.f_y * self.section.A_w
+            return 0.36 * self.section.f_y * self.section.A_g
+        # TODO: improve this - embed in SteelSection?
+        f_yw = self.section.f_yw
+        if isnan(f_yw):
+            f_yw = self.section.f_y
+        return 0.6 * f_yw * self.section.A_w
 
     @property
     def V_b(self) -> float:
