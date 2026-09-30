@@ -1,3 +1,4 @@
+import inspect
 import os
 import pandas as pd
 from enum import StrEnum
@@ -68,7 +69,7 @@ def report(
 ) -> None:
     # convert single-value attribute to list
     if attribute_names is None:
-        attribute_names = list(obj.__annotations__.keys())
+        attribute_names = list(inspect.get_annotations(type(obj)))
     if not isinstance(attribute_names, list):
         attribute_names = [attribute_names]
     if exclude_attribute_names is not None:
