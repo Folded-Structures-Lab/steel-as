@@ -239,7 +239,7 @@ class SteelSlenderness:
 
         elif self.slender_section_type_x == 2:
             z = self.geom.Z_x * (self.lam_sy_x / self.lam_s_x) ** 2
-        elif self._web_shear_slenderness_ratio == 3:
+        elif self.slender_section_type_x == 3:
             raise NotImplementedError("Slender CHS sections not implemented")
         return z
 
@@ -323,7 +323,7 @@ class SteelSlenderness:
         else:
             return True
 
-    def _web_shear_slenderness_ratio(self) -> bool:
+    def _web_shear_slenderness_ratio(self) -> float:
         """AS4100 Cl 5.11.2 web shear slenderness ratio for sections with approximatly uniform web shear stress distribution"""
         t_w = self.geom.t if self.geom.sec_type in ("RHS", "SHS") else self.geom.t_w
         f_yw = self.mat.f_yw
