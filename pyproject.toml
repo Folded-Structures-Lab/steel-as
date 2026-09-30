@@ -23,6 +23,9 @@ dependencies = [
     "pandas>=2.0.2"
 ]
 
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
 [project.urls]
 "Homepage" = "https://github.com/Folded-Structures-Lab/steel-as"
 
